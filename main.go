@@ -19,8 +19,8 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/billykwooten/ecobee-exporter/collector"
 	"github.com/billykwooten/go-ecobee/ecobee"
+	"github.com/dtrumpfheller/ecobee-exporter/collector"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"gopkg.in/alecthomas/kingpin.v2"

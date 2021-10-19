@@ -1,3 +1,6 @@
+# Important
+This is a fork of [https://github.com/billykwooten/ecobee-exporter](https://github.com/billykwooten/ecobee-exporter) and was slightly extended for my needs. Please check him out!
+
 # ecobee_exporter
 
 ![Docker Pulls](https://img.shields.io/docker/pulls/billykwooten/ecobee-exporter.svg)
