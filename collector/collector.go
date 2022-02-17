@@ -218,35 +218,34 @@ func (c *eCollector) Collect(ch chan<- prometheus.Metric) {
 				}
 			}
 		}
-		statSummary, err := c.client.GetThermostatSummary(ecobee.Selection{
-			SelectionType:          "registered",
-			IncludeEquipmentStatus: true,
-			IncludeAlerts:          true,
-		})
-		if err != nil {
-			log.Error(err)
-			return
-		}
-		// sAttr := []string{"HeatPump", "HeatPump2", "HeatPump3", "CompCool1", "CompCool2", "AuxHeat1", "AuxHeat2", "AuxHeat3", "Fan", "Humidifier", "Dehumidifier", "Ventilator", "Economizer", "CompHotWater", "AuxHotWater"}
-		sAttr := []string{"CompCool1", "AuxHeat1", "Fan"}
-		for _, s := range statSummary {
-			if s.Connected {
-				r := reflect.ValueOf(s)
-				for _, a := range sAttr {
-					f := reflect.Indirect(r).FieldByName(a)
-					switch f.Bool() {
-					case true:
-						ch <- prometheus.MustNewConstMetric(
-							c.hvacInOperation, prometheus.GaugeValue, 1, s.Identifier, s.Name, a,
-						)
-					case false:
-						ch <- prometheus.MustNewConstMetric(
-							c.hvacInOperation, prometheus.GaugeValue, 0, s.Identifier, s.Name, a,
-						)
-					}
+	}
+	statSummary, err := c.client.GetThermostatSummary(ecobee.Selection{
+		SelectionType:          "registered",
+		IncludeEquipmentStatus: true,
+		IncludeAlerts:          true,
+	})
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	// sAttr := []string{"HeatPump", "HeatPump2", "HeatPump3", "CompCool1", "CompCool2", "AuxHeat1", "AuxHeat2", "AuxHeat3", "Fan", "Humidifier", "Dehumidifier", "Ventilator", "Economizer", "CompHotWater", "AuxHotWater"}
+	sAttr := []string{"CompCool1", "AuxHeat1", "Fan"}
+	for _, s := range statSummary {
+		if s.Connected {
+			r := reflect.ValueOf(s)
+			for _, a := range sAttr {
+				f := reflect.Indirect(r).FieldByName(a)
+				switch f.Bool() {
+				case true:
+					ch <- prometheus.MustNewConstMetric(
+						c.hvacInOperation, prometheus.GaugeValue, 1, s.Identifier, s.Name, a,
+					)
+				case false:
+					ch <- prometheus.MustNewConstMetric(
+						c.hvacInOperation, prometheus.GaugeValue, 0, s.Identifier, s.Name, a,
+					)
 				}
 			}
 		}
 	}
-
 }
